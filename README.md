@@ -2,6 +2,9 @@
 
 Sistema full stack para gerenciamento de **leads comerciais**, desenvolvido como parte de um teste técnico para vaga Full Stack (.NET + React).
 
+![image](https://github.com/user-attachments/assets/df3dfacf-0473-4930-a56a-8e3278b436c6)
+
+
 ---
 
 ## 🧰 Tecnologias Utilizadas
