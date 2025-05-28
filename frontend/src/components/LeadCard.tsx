@@ -29,7 +29,11 @@ export const LeadCard: React.FC<LeadCardProps> = ({
             {lead.firstName.charAt(0).toUpperCase()}
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900">{lead.firstName}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {activeTab === "accepted"
+              ? `${lead.firstName} ${lead.lastName}`
+              : lead.firstName}
+          </h2>
 
           <span className="text-sm text-gray-500 flex items-center gap-1 mt-1">
             <FaCalendarAlt />
@@ -64,6 +68,18 @@ export const LeadCard: React.FC<LeadCardProps> = ({
 
       {/* Descrição */}
       <p className="mb-6 text-gray-800">{lead.description}</p>
+
+      {/* Informações extras: apenas se aceito */}
+      {activeTab === "accepted" && (
+        <div className="flex space-x-4">
+          <p>
+            <strong>Email:</strong> {lead.email} 
+          </p>
+          <p>
+            <strong>Telefone:</strong> {lead.phone}
+          </p>
+        </div>
+      )}
 
       {/* Botões e preço alinhados nas pontas */}
       <div className="flex justify-between items-center">
