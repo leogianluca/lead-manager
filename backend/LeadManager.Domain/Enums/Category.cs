@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace LeadManager.Domain.Enums
 {
-    public enum LeadStatusEnum
+    public enum CategoryEnum
     {
-        Invited,
-        Accepted,
-        Rejected
+        Residential,
+        Commercial,
+        Industrial,
+        Other
     }
 }

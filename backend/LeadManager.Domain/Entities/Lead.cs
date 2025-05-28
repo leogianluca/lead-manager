@@ -1,24 +1,66 @@
 ﻿using LeadManager.Domain.Enums;
+using LeadManager.Domain.Events;
+using LeadManager.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeadManager.Domain.Entities
 {
     public class Lead
     {
-        public Guid Id { get; set; }
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
-        public string Email { get; set; } = "";
-        public string Phone { get; set; } = "";
-        public string Suburb { get; set; } = "";
-        public string Category { get; set; } = "";
-        public string Description { get; set; } = "";
-        public decimal Price { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public LeadStatus Status { get; set; } = LeadStatus.Invited;
+        public Guid Id { get; private set; }
+        public PersonName FirstName { get; private set; }
+        public PersonName LastName { get; private set; }
+        public Email Email { get; private set; }
+        public Phone Phone { get; private set; }
+        public Suburb Suburb { get; private set; }
+        public CategoryEnum Category { get; private set; }
+        public string Description { get; private set; }
+        public Price Price { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public LeadStatusEnum Status { get; private set; }
+
+        // Domain events
+        private readonly List<object> _domainEvents = new();
+        public IReadOnlyCollection<object> DomainEvents => _domainEvents.AsReadOnly();
+        public void ClearDomainEvents() => _domainEvents.Clear();
+
+        private Lead() { } // para EF Core
+
+        public Lead(PersonName firstName, PersonName lastName, Email email, Phone phone, Suburb suburb, CategoryEnum category, string description, Price price)
+        {
+            Id = Guid.NewGuid();
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Phone = phone;
+            Suburb = suburb;
+            Category = category;
+            Description = description;
+            Price = price;
+            CreatedAt = DateTime.UtcNow;
+            Status = LeadStatusEnum.Invited;
+        }
+
+        public void Accept()
+        {
+            if (Status != LeadStatusEnum.Invited)
+                throw new InvalidOperationException("Lead já está processado.");
+
+            Status = LeadStatusEnum.Accepted;
+
+            if (Price.Value > 500m)
+                Price = new Price(Price.Value * 0.9m); // aplica 10% de desconto criando um novo Price
+
+            _domainEvents.Add(new LeadAcceptedEvent(Id));
+        }
+
+        public void Reject()
+        {
+            if (Status != LeadStatusEnum.Invited)
+                throw new InvalidOperationException("Lead já está processado.");
+
+            Status = LeadStatusEnum.Rejected;
+        }
     }
 }

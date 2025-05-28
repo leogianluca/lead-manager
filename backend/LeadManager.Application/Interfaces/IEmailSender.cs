@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LeadManager.Infrastructure.Services
 {
-    internal class FakeEmailService
+    public interface IEmailSender
     {
+        Task SendEmailAsync(string to, string subject, string body);
     }
 }

@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using System;
 
 namespace LeadManager.Application.Commands
 {
-    internal class AcceptLeadCommand
+    public class AcceptLeadCommand : IRequest<Unit>
     {
+        public Guid Id { get; }
+
+        public AcceptLeadCommand(Guid id)
+        {
+            Id = id;
+        }
     }
 }
