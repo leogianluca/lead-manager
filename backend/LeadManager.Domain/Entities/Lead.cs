@@ -20,11 +20,6 @@ namespace LeadManager.Domain.Entities
         public DateTime CreatedAt { get; private set; }
         public LeadStatusEnum Status { get; private set; }
 
-        // Domain events
-        private readonly List<object> _domainEvents = new();
-        public IReadOnlyCollection<object> DomainEvents => _domainEvents.AsReadOnly();
-        public void ClearDomainEvents() => _domainEvents.Clear();
-
         private Lead() { } // para EF Core
 
         public Lead(PersonName firstName, PersonName lastName, Email email, Phone phone, Suburb suburb, CategoryEnum category, string description, Price price)
@@ -51,8 +46,6 @@ namespace LeadManager.Domain.Entities
 
             if (Price.Value > 500m)
                 Price = new Price(Price.Value * 0.9m); // aplica 10% de desconto criando um novo Price
-
-            _domainEvents.Add(new LeadAcceptedEvent(Id));
         }
 
         public void Reject()

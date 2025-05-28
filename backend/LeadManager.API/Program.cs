@@ -30,9 +30,24 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ILeadRepository, LeadRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(CreateLeadHandler).Assembly);
+});
+
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DefaultCorsPolicy", builder =>
+    {
+        builder.WithOrigins(allowedOrigins)
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
 });
 
 var app = builder.Build();
@@ -44,6 +59,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("DefaultCorsPolicy");
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

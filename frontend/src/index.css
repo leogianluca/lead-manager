@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Seus estilos globais customizados aqui, se quiser */
+body {
+  font-family: 'Inter', sans-serif; /* exemplo de fonte */
+  background-color: #f9fafb; /* fundo clarinho */
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes fade-in-out {
+  0%, 100% { opacity: 0; }
+  10%, 90% { opacity: 1; }
+}
+
+.animate-fade-in-out {
+  animation: fade-in-out 3s ease forwards;
+}
+
+@keyframes loading-animation {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(50%); }
+  100% { transform: translateX(100%); }
+}
+
+.loading-bar {
+  animation: loading-animation 1.5s linear infinite;
+}

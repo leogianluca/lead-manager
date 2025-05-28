@@ -1,5 +1,8 @@
-﻿using LeadManager.Application.Commands;
+﻿using AutoMapper;
+using LeadManager.Application.Commands;
+using LeadManager.Application.DTOs;
 using LeadManager.Application.Queries;
+using LeadManager.Domain.Entities;
 using LeadManager.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +16,12 @@ namespace LeadManager.API.Controllers
     public class LeadController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public LeadController(IMediator mediator)
+        public LeadController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -44,14 +49,18 @@ namespace LeadManager.API.Controllers
         public async Task<IActionResult> GetLeadById(Guid id)
         {
             var lead = await _mediator.Send(new GetLeadByIdQuery(id));
-            return Ok(lead);
+            var leadDto = _mapper.Map<LeadDto>(lead);
+
+            return Ok(leadDto);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllLeads()
         {
             var leads = await _mediator.Send(new GetAllLeadsQuery());
-            return Ok(leads);
+            var leadDtos = _mapper.Map<IEnumerable<LeadDto>>(leads);
+
+            return Ok(leadDtos);
         }
 
         [HttpGet("status/{status}")]
@@ -61,7 +70,9 @@ namespace LeadManager.API.Controllers
                 return BadRequest("Status inválido");
 
             var leads = await _mediator.Send(new GetLeadsByStatusQuery(leadStatus));
-            return Ok(leads);
+            var leadDtos = _mapper.Map<IEnumerable<LeadDto>>(leads);
+            
+            return Ok(leadDtos);
         }
     }
 }

@@ -9,5 +9,5 @@ export interface Lead {
   description: string;
   price: number;
   createdAt: string;
-  status: string;
+  status: number;
 }
