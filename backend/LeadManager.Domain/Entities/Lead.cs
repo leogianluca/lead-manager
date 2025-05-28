@@ -1,5 +1,4 @@
 ﻿using LeadManager.Domain.Enums;
-using LeadManager.Domain.Events;
 using LeadManager.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;

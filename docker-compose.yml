@@ -1,39 +1,35 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
-    environment:
-      SA_PASSWORD: "password123"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
-    volumes:
-      - sql_data:/var/opt/mssql
-
   backend:
     build:
-      context: ./LeadManager.API
-    container_name: leadmanager-api
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=LeadManagerDb;User Id=sa;Password=password123;"
-    depends_on:
-      - sqlserver
+      context: ./backend
     ports:
-      - "5000:80"
+      - "7009:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=db;Database=LeadManagerDb;User Id=sa;Password=StrongPassword123;
+    depends_on:
+      - db
 
   frontend:
     build:
       context: ./frontend
-    container_name: leadmanager-frontend
     ports:
-      - "3000:3000"
-    stdin_open: true
-    tty: true
+      - "5173:80"
     depends_on:
       - backend
 
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "StrongPassword123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
 volumes:
-  sql_data:
+  sqlvolume:

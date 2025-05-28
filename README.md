@@ -47,9 +47,9 @@ docker-compose up --build
 
 | Serviço     | URL                          |
 |-------------|-------------------------------|
-| Frontend    | http://localhost:3000         |
-| API         | http://localhost:5000         |
-| Swagger     | http://localhost:5000/swagger |
+| Frontend    | http://localhost:5173         |
+| API         | https://localhost:7009         |
+| Swagger     | http://localhost:7009/swagger |
 | SQL Server  | localhost:1433                |
 
 ---
@@ -69,7 +69,7 @@ dotnet run
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
 ---
